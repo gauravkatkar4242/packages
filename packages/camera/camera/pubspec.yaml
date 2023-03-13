@@ -25,7 +25,7 @@ dependencies:
 #  camera_avfoundation: ^0.9.9
   camera_avfoundation:
     git:
-      url: https://github.com/gauravkatkar4242/packages.git
+      url: https://github.com/yournextleap/flutter-packages.git
       path: packages/camera/camera_avfoundation
       ref: main
 
