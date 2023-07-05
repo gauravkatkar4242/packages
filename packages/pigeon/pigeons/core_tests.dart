@@ -15,6 +15,7 @@ class AllTypes {
   AllTypes({
     this.aBool = false,
     this.anInt = 0,
+    this.anInt64 = 0,
     this.aDouble = 0,
     required this.aByteArray,
     required this.a4ByteArray,
@@ -28,6 +29,7 @@ class AllTypes {
 
   bool aBool;
   int anInt;
+  int anInt64;
   double aDouble;
   Uint8List aByteArray;
   Int32List a4ByteArray;
@@ -46,6 +48,7 @@ class AllNullableTypes {
   AllNullableTypes(
     this.aNullableBool,
     this.aNullableInt,
+    this.aNullableInt64,
     this.aNullableDouble,
     this.aNullableByteArray,
     this.aNullable4ByteArray,
@@ -62,6 +65,7 @@ class AllNullableTypes {
 
   bool? aNullableBool;
   int? aNullableInt;
+  int? aNullableInt64;
   double? aNullableDouble;
   Uint8List? aNullableByteArray;
   Int32List? aNullable4ByteArray;
@@ -88,7 +92,7 @@ class AllNullableTypesWrapper {
 /// platform_test integration tests.
 @HostApi()
 abstract class HostIntegrationCoreApi {
-  // ========== Syncronous method tests ==========
+  // ========== Synchronous method tests ==========
 
   /// A no-op function taking no arguments and returning no value, to sanity
   /// test basic calling.
@@ -102,8 +106,11 @@ abstract class HostIntegrationCoreApi {
   /// Returns an error, to test error handling.
   Object? throwError();
 
-  /// Responds with an error from an async void function.
+  /// Returns an error from a void function, to test error handling.
   void throwErrorFromVoid();
+
+  /// Returns a Flutter error, to test error handling.
+  Object? throwFlutterError();
 
   /// Returns passed in int.
   @ObjCSelector('echoInt:')
@@ -145,7 +152,7 @@ abstract class HostIntegrationCoreApi {
   @SwiftFunction('echo(_:)')
   Map<String?, Object?> echoMap(Map<String?, Object?> aMap);
 
-  // ========== Syncronous nullable method tests ==========
+  // ========== Synchronous nullable method tests ==========
 
   /// Returns the passed object, to test serialization and deserialization.
   @ObjCSelector('echoAllNullableTypes:')
@@ -210,7 +217,7 @@ abstract class HostIntegrationCoreApi {
   @SwiftFunction('echoNullable(_:)')
   Map<String?, Object?>? echoNullableMap(Map<String?, Object?>? aNullableMap);
 
-  // ========== Asyncronous method tests ==========
+  // ========== Asynchronous method tests ==========
 
   /// A no-op function taking no arguments and returning no value, to sanity
   /// test basic asynchronous calling.
@@ -273,6 +280,10 @@ abstract class HostIntegrationCoreApi {
   @async
   void throwAsyncErrorFromVoid();
 
+  /// Responds with a Flutter error from an async function returning a value.
+  @async
+  Object? throwAsyncFlutterError();
+
   /// Returns the passed object, to test async serialization and deserialization.
   @async
   @ObjCSelector('echoAsyncAllTypes:')
@@ -331,7 +342,7 @@ abstract class HostIntegrationCoreApi {
   /// Returns the passed map, to test serialization and deserialization asynchronously.
   @async
   @ObjCSelector('echoAsyncNullableMap:')
-  @SwiftFunction('echAsyncoNullable(_:)')
+  @SwiftFunction('echoAsyncNullable(_:)')
   Map<String?, Object?>? echoAsyncNullableMap(Map<String?, Object?>? aMap);
 
   // ========== Flutter API test wrappers ==========
@@ -598,7 +609,7 @@ abstract class FlutterSmallApi {
 
 /// A data class containing a List, used in unit tests.
 // TODO(stuartmorgan): Evaluate whether these unit tests are still useful; see
-// TODOs above about restructring.
+// TODOs above about restructuring.
 class TestMessage {
   // ignore: always_specify_types, strict_raw_type
   List? testList;
